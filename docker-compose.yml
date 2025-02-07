@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 services:
   backend:
@@ -8,5 +8,28 @@ services:
     volumes:
       - .:/app
     environment:
-      - NODE_ENV=production
-    command: npm start
+      - NODE_ENV=development
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: nepali_travel_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: nepalitravel
+      MYSQL_DATABASE: nepali_travel_db
+      MYSQL_USER: priyanka
+      MYSQL_PASSWORD: nepalitravel
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+volumes:
+  mysql_data:
+
+networks:
+  app-network:
+    driver: bridge
