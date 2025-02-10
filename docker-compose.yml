@@ -2,17 +2,36 @@ version: '3.8'
 
 services:
   backend:
-    build: .
+    build: ./backend  # ✅ Now points to the backend folder
+    working_dir: /app
+    volumes:
+      - ./backend:/app  # ✅ Mounts backend code
+      - /app/node_modules
     ports:
       - "5000:5000"
-    volumes:
-      - .:/app
     environment:
       - NODE_ENV=development
     depends_on:
       - mysql
     networks:
       - app-network
+    command: npm run dev
+
+  frontend:
+    build: ./frontend  # ✅ Now points to the frontend folder
+    working_dir: /app
+    volumes:
+      - ./frontend:/app  # ✅ Mounts frontend code
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - backend
+    networks:
+      - app-network
+    command: npm run dev
 
   mysql:
     image: mysql:8.0

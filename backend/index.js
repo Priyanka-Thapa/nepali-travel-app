@@ -4,35 +4,38 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 dotenv.config();
 const path = require("path");
+const { router: authRoutes, authenticateToken } = require("./src/routes/authRoutes");
 
 const port = process.env.PORT || 5000;
 
 const destinationRoutes = require("./src/routes/destinationRoutes");
-const authRoutes = require("./src/routes/authRoutes");
 app.use(cors());
 app.use(express.json()); // Middleware to parse JSON
 
-// Serve static frontend files
-app.use(express.static(path.join(__dirname, "../frontend/build")));
 
-// Sample API route
-app.get("/api/hello", (req, res) => {
-  res.json({ message: "Hello from the backend!" });
-});
-
-// Serve frontend for all routes
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
-});
-
-
-app.get("/", (req, res) => {
-    res.send("Welcome to Nepali Travel App!");
-});
+// app.get("/", (req, res) => {
+//   res.send("heheh");
+// });
 
 app.use("/api/auth", authRoutes);
 
-app.use("/api/destinations", destinationRoutes);
+// ✅ API routes MUST be defined first
+app.get("/api/destinations", (req, res) => {
+  res.json([
+      { id: 1, name: "Pokhara", location: "Nepal" },
+      { id: 2, name: "Everest Base Camp", location: "Nepal" }
+  ]);
+});
+
+// app.use("/api/destinations", destinationRoutes);
+
+// // Serve static frontend files
+// app.use(express.static(path.join(__dirname, "../frontend/build")));
+
+// // Serve frontend for all routes
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
+// });
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

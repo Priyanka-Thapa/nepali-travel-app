@@ -1,27 +1,39 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 require("dotenv").config();
 
 const router = express.Router();
 
-// Hardcoded users (No database)
-const users = [
-  { id: 1, username: "admin", password: "admin123", role: "admin" },
-  { id: 2, username: "user", password: "user123", role: "user" }
-];
+// Hardcoded admin user
+const adminUser = {
+  username: "admin",
+  password: bcrypt.hashSync("admin123", 10), // Hashed password for security
+};
 
 // Login route
-router.post("/login", (req, res) => {
+router.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
-  // Find user in hardcoded list
-  const user = users.find(u => u.username === username && u.password === password);
-  if (!user) return res.status(401).json({ error: "Invalid credentials" });
+  if (username !== adminUser.username || !bcrypt.compareSync(password, adminUser.password)) {
+    return res.status(401).json({ message: "Invalid credentials" });
+  }
 
   // Generate JWT token
-  const token = jwt.sign({ id: user.id, username: user.username, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
-
+  const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: "1h" });
   res.json({ token });
 });
 
-module.exports = router;
+// Middleware to protect routes
+const authenticateToken = (req, res, next) => {
+  const token = req.headers["authorization"];
+  if (!token) return res.status(403).json({ message: "Unauthorized" });
+
+  jwt.verify(token.split(" ")[1], SECRET_KEY, (err, user) => {
+    if (err) return res.status(403).json({ message: "Invalid token" });
+    req.user = user;
+    next();
+  });
+};
+
+module.exports = { router, authenticateToken };

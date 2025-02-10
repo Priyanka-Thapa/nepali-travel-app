@@ -1,18 +1,17 @@
 import React, { useContext } from "react";
-import { ThemeContext } from "../context/ThemeContext";
-import { Button } from "react-bootstrap";
+import { DarkModeContext } from "../context/DarkModeContext";
 
 const DarkModeToggle = () => {
-  const { darkMode, setDarkMode } = useContext(ThemeContext);
+  const { darkMode, toggleDarkMode } = useContext(DarkModeContext);
 
   return (
-    <Button
-      onClick={() => setDarkMode(!darkMode)}
-      variant={darkMode ? "light" : "dark"}
-      className="dark-mode-toggle"
+    <button
+      onClick={toggleDarkMode}
+      className="btn btn-outline-primary ml-3"
+      style={{ transition: "0.3s", borderRadius: "50%" }}
     >
-      {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
-    </Button>
+      <i className={`fas ${darkMode ? "fa-moon" : "fa-sun"}`}></i>
+    </button>
   );
 };
 
