@@ -1,0 +1,28 @@
+/* Centered login box */
+.login-container {
+  background: #f4f4f4; /* Neutral background */
+}
+
+/* Login Box */
+.login-box {
+  width: 100%;
+  max-width: 400px;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+/* Neutral color for button */
+.btn-neutral {
+  background: #555; /* Neutral gray */
+  color: white;
+  font-weight: bold;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+/* Button hover effect */
+.btn-neutral:hover {
+  background: #333; /* Darker gray */
+  color: white;
+}

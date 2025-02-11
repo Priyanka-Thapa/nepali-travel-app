@@ -10,7 +10,11 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - NODE_ENV=development
+      NODE_ENV: development
+      DB_HOST: mysql
+      DB_USER: priyanka
+      DB_PASS: nepalitravel
+      DB_NAME: nepali_travel_db
     depends_on:
       - mysql
     networks:
@@ -36,6 +40,7 @@ services:
   mysql:
     image: mysql:8.0
     container_name: nepali_travel_mysql
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: nepalitravel
       MYSQL_DATABASE: nepali_travel_db
@@ -43,6 +48,8 @@ services:
       MYSQL_PASSWORD: nepalitravel
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - app-network
     ports:
       - "3306:3306"
 

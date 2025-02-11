@@ -17,11 +17,13 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     location: DataTypes.STRING,
     description: DataTypes.TEXT,
-    imageUrl: DataTypes.STRING,
+    image_url: DataTypes.STRING,
     tags: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Destination',
+    tableName: "destinations",
+    timestamps: false  // Disables `createdAt` and `updatedAt`
   });
   return Destination;
 };
