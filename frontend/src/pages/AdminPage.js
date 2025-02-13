@@ -26,6 +26,11 @@ const AdminPage = () => {
     // Fetch Destinations from API
     useEffect(() => {
         fetchDestinations();
+        // Initialize Bootstrap tooltips
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        tooltipTriggerList.forEach((tooltipTriggerEl) => {
+            new window.bootstrap.Tooltip(tooltipTriggerEl);
+        });
     }, []);
 
     useEffect(() => {
@@ -39,7 +44,7 @@ const AdminPage = () => {
     function capitalizeFirstLetter(str) {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
-    
+
 
     const handleTagChange = (selectedTags) => {
         setTags(selectedTags || []);
@@ -80,13 +85,15 @@ const AdminPage = () => {
             name: formData.get("name"),
             location: formData.get("location"),
             description: formData.get("description"),
-            tags:tagValue.join(","), 
+            tags: tagValue.join(","),
             image: formData.get("image"),
         };
 
         try {
             if (isEditing) {
-                await axios.put(`http://localhost:5000/api/destinations/${selectedDestination.id}`, destinationData);
+                await axios.put(`http://localhost:5000/api/destinations/${selectedDestination.id}`, destinationData,{
+                    headers: { "Content-Type": "multipart/form-data" } // Required for file upload
+            });
             } else {
                 await axios.post("http://localhost:5000/api/destinations", destinationData, {
                     headers: {
@@ -143,7 +150,17 @@ const AdminPage = () => {
                                 <tr key={destination.id}>
                                     <td>{destination.name}</td>
                                     <td>{destination.location}</td>
-                                    <td>{destination.description}</td>
+                                    <td>
+                                        <div
+                                            className="text-truncate"
+                                            style={{ maxWidth: "400px", cursor: "pointer" }}
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title={destination.description}
+                                        >
+                                            {destination.description}
+                                        </div>
+                                    </td>
                                     <td>{destination.tags}</td>
                                     <td>
                                         <img src={destination.image_url} alt="Destination" className="img-thumbnail" width="60" />

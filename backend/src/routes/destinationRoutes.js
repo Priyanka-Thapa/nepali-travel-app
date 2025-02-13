@@ -74,7 +74,13 @@ router.put("/:id", upload.single("image"), async (req, res) => {
     const { name, description, location, tags } = req.body;
     const imageUrl = req.file ? `${process.env.BASE_URL}/uploads/${req.file.filename}` : null; // Use BASE_URL from .env
 
-    await destination.update(req.body);
+    await destination.update({
+      name,
+      description,
+      location,
+      tags,
+      image_url: imageUrl, // Store frontend path in DB
+    });
     res.json(destination);
   } catch (error) {
     res.status(500).json({ error: "Failed to update destination" });

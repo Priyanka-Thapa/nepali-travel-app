@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
-import "./Destinations.css";
+import "../styles/destinations.css";
 
 function Destination() {
   const [destinations, setDestinations] = useState([]);
@@ -76,9 +76,9 @@ function Destination() {
             <Form.Select value={category} onChange={(e) => setCategory(e.target.value)}>
               <option value="All">All Categories</option>
               <option value="Cultural">Cultural</option>
+              <option value="historical">Historical</option>
               <option value="Adventure">Adventure</option>
-              <option value="Trekking">Trekking</option>
-              <option value="Wildlife">Wildlife</option>
+              <option value="Natural">Natural</option>
             </Form.Select>
           </div>
         </div>

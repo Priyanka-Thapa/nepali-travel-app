@@ -40,7 +40,7 @@ const Navbar = ({ onLoginClick }) => {
           <nav className={`navbar navbar-expand-lg ${darkMode ? "bg-dark navbar-dark" : "bg-light navbar-light"} shadow-lg py-3 py-lg-0 pl-3 pl-lg-5`}>
             <Link to="/" className="navbar-brand">
               <h1 className={`m-0 ${darkMode ? "text-light" : "text-primary"} fs-3 fs-lg-1`}>
-                <span className={darkMode ? "text-white" : "text-dark"}>NEPAL TRAVEL </span>DESTINATION
+                <span className={darkMode ? "text-white" : "text-dark"}>TRAVEL </span>NEPAL
               </h1>
             </Link>
             <button
