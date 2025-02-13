@@ -1,0 +1,12 @@
+# Node.js
+node_modules
+npm-debug.log
+.env
+
+# SQLite Database
+travel.db
+*.sqlite
+*.sqlite3
+
+# Docker
+docker-compose.override.yml

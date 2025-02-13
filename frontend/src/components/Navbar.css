@@ -1,0 +1,37 @@
+/* Navbar Background */
+.animated-navbar {
+    background: linear-gradient(135deg, #007bff, #00c6ff);
+    padding: 10px;
+    animation: slideDown 1s ease-in-out;
+  }
+  
+  /* Brand Styling */
+  .nav-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white !important;
+  }
+  
+  /* Links */
+  .animated-navbar .nav-link {
+    color: white !important;
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+  
+  .animated-navbar .nav-link:hover {
+    color: yellow !important;
+  }
+  
+  /* Slide-down Animation */
+  @keyframes slideDown {
+    from {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  

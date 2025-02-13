@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend  # ✅ Now points to the backend folder
+    working_dir: /app
+    volumes:
+      - ./backend:/app  # ✅ Mounts backend code
+      - /app/node_modules
+    ports:
+      - "5000:5000"
+    environment:
+      NODE_ENV: development
+      DB_HOST: mysql
+      DB_USER: priyanka
+      DB_PASS: nepalitravel
+      DB_NAME: nepali_travel_db
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+    command: npm run dev
+
+  frontend:
+    build: ./frontend  # ✅ Now points to the frontend folder
+    working_dir: /app
+    volumes:
+      - ./frontend:/app  # ✅ Mounts frontend code
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - backend
+    networks:
+      - app-network
+    command: npm run dev
+
+  mysql:
+    image: mysql:8.0
+    container_name: nepali_travel_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: nepalitravel
+      MYSQL_DATABASE: nepali_travel_db
+      MYSQL_USER: priyanka
+      MYSQL_PASSWORD: nepalitravel
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - app-network
+    ports:
+      - "3306:3306"
+
+volumes:
+  mysql_data:
+
+networks:
+  app-network:
+    driver: bridge
