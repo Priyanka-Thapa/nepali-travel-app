@@ -1,15 +1,14 @@
 import React, { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import "../styles/sidebar.css";
 
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 const Sidebar = () => {
   const { logout } = useContext(AuthContext);
-  const navigate = useNavigate();
-
   const handleLogout = () => {
     logout();
-    navigate("/login");
+    window.location.href = BASE_URL; // Redirect manually
   };
 
   return (
@@ -20,11 +19,11 @@ const Sidebar = () => {
           <Link to="/admin" className="nav-link">🏠 Dashboard</Link>
         </li>
         <li className="nav-item">
-          <Link to="/admin/destinations" className="nav-link">📍 Destinations</Link>
+          <Link to="/" className="nav-link">📍 Destinations</Link>
         </li>
-        <li className="nav-item">
+        {/* <li className="nav-item">
           <Link to="/admin/settings" className="nav-link">⚙️ Settings</Link>
-        </li>
+        </li> */}
         <li className="nav-item">
           <button className="btn btn-danger w-100 mt-3" onClick={handleLogout}>🚪 Logout</button>
         </li>

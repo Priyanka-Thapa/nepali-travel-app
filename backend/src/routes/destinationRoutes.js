@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Route to handle file upload
-router.post("/",authMiddleware, upload.single("image"), async (req, res) => {
+router.post("/", upload.single("image"), async (req, res) => {
   try {
     const { name, description, location, tags } = req.body;
     const imageUrl = req.file ? `${process.env.BASE_URL}/uploads/${req.file.filename}` : null; // Use BASE_URL from .env
@@ -65,12 +65,15 @@ router.get("/:id", authMiddleware, async (req, res) => {
 });
 
 // Update a destination by ID
-router.put("/:id", async (req, res) => {
+router.put("/:id", upload.single("image"), async (req, res) => {
   try {
     const destination = await Destination.findByPk(req.params.id);
     if (!destination) {
       return res.status(404).json({ error: "Destination not found" });
     }
+    const { name, description, location, tags } = req.body;
+    const imageUrl = req.file ? `${process.env.BASE_URL}/uploads/${req.file.filename}` : null; // Use BASE_URL from .env
+
     await destination.update(req.body);
     res.json(destination);
   } catch (error) {

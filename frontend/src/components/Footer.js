@@ -97,27 +97,16 @@ const Footer = () => {
               Contact Us
             </h5>
             <p>
-              <i className="fa fa-map-marker-alt mr-2"></i>123 Street, New York, USA
+              <i className="fa fa-map-marker-alt mr-2"></i>Kathmandu ,Nepal
             </p>
             <p>
-              <i className="fa fa-phone-alt mr-2"></i>+012 345 67890
+              <i className="fa fa-phone-alt mr-2"></i>9867179133
             </p>
             <p>
-              <i className="fa fa-envelope mr-2"></i>info@example.com
+              <i className="fa fa-envelope mr-2"></i>techgaun@example.com
             </p>
-            <h6 className="text-white text-uppercase mt-4 mb-3" style={{ letterSpacing: '5px' }}>
-              Newsletter
-            </h6>
-            <div className="w-100">
-              <div className="input-group">
-                <input type="text" className="form-control border-light" style={{ padding: '25px' }} placeholder="Your Email" />
-
-
-                <div className="input-group-append">
-                  <button className="btn btn-primary px-3">Sign Up</button>
-                </div>
-              </div>
-            </div>
+           
+           
           </div>
         </div>
       </div>

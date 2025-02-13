@@ -3,6 +3,17 @@ import axios from "axios";
 import Sidebar from "../components/Sidebar";
 import "../styles/admin.css"; // Ensure styles are correctly linked
 import "bootstrap/dist/css/bootstrap.min.css";
+import Select from "react-select";
+import CreatableSelect from "react-select/creatable";
+
+
+
+const tagOptions = [
+    { value: "natural", label: "Natural" },
+    { value: "cultural", label: "Cultural" },
+    { value: "adventure", label: "Adventure" },
+    { value: "historical", label: "Historical" },
+];
 
 const AdminPage = () => {
     const [destinations, setDestinations] = useState([]);
@@ -10,10 +21,29 @@ const AdminPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [image, setImage] = useState(null);
+    const [tags, setTags] = useState([]);
+
     // Fetch Destinations from API
     useEffect(() => {
         fetchDestinations();
     }, []);
+
+    useEffect(() => {
+        if (selectedDestination?.tags) {
+            setTags(selectedDestination.tags.split(',').map(tag => ({ value: tag, label: capitalizeFirstLetter(tag) })));
+        } else {
+            setTags([]);
+        }
+    }, [selectedDestination]);
+
+    function capitalizeFirstLetter(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+    
+
+    const handleTagChange = (selectedTags) => {
+        setTags(selectedTags || []);
+    };
 
     const fetchDestinations = async () => {
         try {
@@ -37,17 +67,20 @@ const AdminPage = () => {
         document.body.classList.remove("modal-open"); // Re-enable scrolling
         setIsModalOpen(false);
         setSelectedDestination(null);
+        setTags([]);
     };
+
 
     // Handle Add or Edit Submission
     const handleSubmit = async (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
+        const tagValue = tags.map(tag => tag.value);
         const destinationData = {
             name: formData.get("name"),
             location: formData.get("location"),
             description: formData.get("description"),
-            tags: formData.get("tags"),
+            tags:tagValue.join(","), 
             image: formData.get("image"),
         };
 
@@ -137,6 +170,8 @@ const AdminPage = () => {
                             maxWidth: '90%',
                             height: 'auto',
                             padding: '20px',
+                            maxHeight: "100vh",
+                            overflowY: "auto",
                             borderRadius: '8px'
                         }}>
                             {/* Close Button */}
@@ -157,9 +192,30 @@ const AdminPage = () => {
                                     <label className="form-label">Description</label>
                                     <textarea name="description" defaultValue={selectedDestination?.description || ""} className="form-control" required></textarea>
                                 </div>
-                                <div className="mb-2">
+                                {/* <div className="mb-2">
                                     <label className="form-label">Tags</label>
                                     <input type="text" name="tags" defaultValue={selectedDestination?.tags || ""} className="form-control" required />
+                                </div> */}
+                                <div className="mb-2">
+                                    <label className="form-label">Tags</label>
+                                    <CreatableSelect
+                                        isMulti
+                                        options={tagOptions}
+                                        value={tags}
+                                        onChange={handleTagChange}
+                                        placeholder="Select or type to create tags..."
+                                        isClearable
+                                        isSearchable
+                                        styles={{
+                                            control: (provided) => ({
+                                                ...provided,
+                                                borderRadius: "5px",
+                                                borderColor: "#ced4da",
+                                                minHeight: "38px",
+                                                boxShadow: "none",
+                                            }),
+                                        }}
+                                    />
                                 </div>
                                 <div className="mb-2">
                                     <label className="form-label">Image URL</label>

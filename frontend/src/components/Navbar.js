@@ -10,14 +10,15 @@ const Navbar = ({ onLoginClick }) => {
 
   return (
     <>
+      {/* Top Bar */}
       <div className={`container-fluid ${darkMode ? "bg-dark text-white" : "bg-light"} pt-3 d-none d-lg-block`}>
         <div className="container">
           <div className="row">
             <div className="col-lg-6 text-center text-lg-left mb-2 mb-lg-0">
               <div className="d-inline-flex align-items-center">
-                <p><i className="fa fa-envelope mr-2"></i>info@example.com</p>
+                <p><i className="fa fa-envelope mr-2"></i>info@techgaun.com</p>
                 <p className="text-body px-3">|</p>
-                <p><i className="fa fa-phone-alt mr-2"></i>+012 345 6789</p>
+                <p><i className="fa fa-phone-alt mr-2"></i>+977 9867179133</p>
               </div>
             </div>
             <div className="col-lg-6 text-center text-lg-right">
@@ -33,23 +34,32 @@ const Navbar = ({ onLoginClick }) => {
         </div>
       </div>
 
+      {/* Navbar */}
       <div className="container-fluid position-relative nav-bar p-0">
         <div className="container-lg position-relative p-0 px-lg-3" style={{ zIndex: 9 }}>
           <nav className={`navbar navbar-expand-lg ${darkMode ? "bg-dark navbar-dark" : "bg-light navbar-light"} shadow-lg py-3 py-lg-0 pl-3 pl-lg-5`}>
             <Link to="/" className="navbar-brand">
-              <h1 className={`m-0 ${darkMode ? "text-light" : "text-primary"}`}>
+              <h1 className={`m-0 ${darkMode ? "text-light" : "text-primary"} fs-3 fs-lg-1`}>
                 <span className={darkMode ? "text-white" : "text-dark"}>NEPAL TRAVEL </span>DESTINATION
               </h1>
             </Link>
-            <button type="button" className="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+            <button
+              type="button"
+              className="navbar-toggler"
+              data-toggle="collapse"
+              data-target="#navbarCollapse"
+              aria-controls="navbarCollapse"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
               <span className="navbar-toggler-icon"></span>
             </button>
             <div className="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
               <div className="navbar-nav ml-auto py-0">
                 <Link to="/" className="nav-item nav-link">Home</Link>
-                <Link to="/about" className="nav-item nav-link">About</Link>
-                <Link to="/services" className="nav-item nav-link">Services</Link>
-                <Link to="/package" className="nav-item nav-link">Tour Packages</Link>
+                <Link to="/" className="nav-item nav-link">About</Link>
+                <Link to="/" className="nav-item nav-link">Services</Link>
+                <Link to="/" className="nav-item nav-link">Tour Packages</Link>
 
                 {/* ✅ Show Login if not logged in, otherwise show Admin */}
                 {!token ? (

@@ -1,48 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import "./Destinations.css"; 
-import destination1 from "../assets/Pashupatinath.png";
-import destination2 from "../assets/pokhara.jpg";
-import destination3 from "../assets/everest.jpg";
-import destination4 from "../assets/abc.jpg";
-import destination5 from "../assets/chitwan.jpg";
-import destination6 from "../assets/lumbini.jpg";
-
-const destinationsData = [
-  { img: destination1, name: "Kathmandu", category: "Cultural", desci: "Kathmandu, the capital of Nepal, is rich in history, culture, and spirituality..." },
-  { img: destination2, name: "Pokhara", category: "Adventure", desci: "Pokhara is known for its stunning lakes..." },
-  { img: destination3, name: "Everest Base Camp", category: "Trekking", desci: "Everest Base Camp is a dream destination for trekkers..." },
-  { img: destination4, name: "Annapurna Circuit", category: "Trekking", desci: "The Annapurna Circuit is one of the most popular trekking routes..." },
-  { img: destination5, name: "Chitwan National Park", category: "Wildlife", desci: "Chitwan National Park is a UNESCO World Heritage Site..." },
-  { img: destination6, name: "Lumbini", category: "Cultural", desci: "Lumbini is the birthplace of Lord Buddha..." },
-  { img: destination1, name: "Kathmandu", category: "Cultural", desci: "Kathmandu, the capital of Nepal, is rich in history..." },
-  { img: destination2, name: "Pokhara", category: "Adventure", desci: "Pokhara is known for its stunning lakes..." },
-  { img: destination3, name: "Everest Base Camp", category: "Trekking", desci: "Everest Base Camp is a dream destination..." },
-  { img: destination4, name: "Annapurna Circuit", category: "Trekking", desci: "The Annapurna Circuit is one of the most popular trekking routes..." },
-  { img: destination5, name: "Chitwan National Park", category: "Wildlife", desci: "Chitwan National Park is a UNESCO World Heritage Site..." },
-  { img: destination6, name: "Lumbini", category: "Cultural", desci: "Lumbini is the birthplace of Lord Buddha..." },
-  { img: destination1, name: "Kathmandu", category: "Cultural", desci: "Kathmandu, the capital of Nepal, is rich in history, culture, and spirituality..." },
-  { img: destination2, name: "Pokhara", category: "Adventure", desci: "Pokhara is known for its stunning lakes..." },
-  { img: destination3, name: "Everest Base Camp", category: "Trekking", desci: "Everest Base Camp is a dream destination for trekkers..." },
-  { img: destination4, name: "Annapurna Circuit", category: "Trekking", desci: "The Annapurna Circuit is one of the most popular trekking routes..." },
-  { img: destination5, name: "Chitwan National Park", category: "Wildlife", desci: "Chitwan National Park is a UNESCO World Heritage Site..." },
-  { img: destination6, name: "Lumbini", category: "Cultural", desci: "Lumbini is the birthplace of Lord Buddha..." },
-  { img: destination1, name: "Kathmandu", category: "Cultural", desci: "Kathmandu, the capital of Nepal, is rich in history..." },
-  { img: destination2, name: "Pokhara1", category: "Adventure", desci: "Pokhara is known for its stunning lakes..." },
-  { img: destination3, name: "Everest Base Camp1", category: "Trekking", desci: "Everest Base Camp is a dream destination..." },
-  { img: destination4, name: "Annapurna Circuit1", category: "Trekking", desci: "The Annapurna Circuit is one of the most popular trekking routes..." },
-  { img: destination5, name: "Chitwan National Park1", category: "Wildlife", desci: "Chitwan National Park is a UNESCO World Heritage Site..." },
-  { img: destination6, name: "Lumbini1", category: "Cultural", desci: "Lumbini is the birthplace of Lord Buddha..." },
-];
+import axios from "axios";
+import "./Destinations.css";
 
 function Destination() {
-  const [destinations] = useState(destinationsData); // Ensure it's initialized properly
+  const [destinations, setDestinations] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("All");
   const [show, setShow] = useState(false);
   const [selectedDestination, setSelectedDestination] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
+
+  useEffect(() => {
+    fetchDestinationsData();
+  }, []);
+
+  const fetchDestinationsData = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/destinations");
+      setDestinations(response.data);
+    } catch (error) {
+      console.error("Error fetching destinations:", error);
+    }
+  };
 
   const handleShow = (destination) => {
     setSelectedDestination(destination);
@@ -52,17 +33,23 @@ function Destination() {
   const handleClose = () => setShow(false);
 
   // Filtering logic based on search and category
-  const filteredDestinations = destinations.filter(destination => {
-    const matchesSearch = destination.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = category === "All" || destination.category === category;
-    return matchesSearch && matchesCategory;
+  const filteredDestinations = destinations.filter((destination) => {
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      (category === "All" || destination.tags.toLowerCase().includes(category.toLowerCase())) &&
+      (
+        destination.name.toLowerCase().includes(searchLower) ||
+        destination.location.toLowerCase().includes(searchLower) ||
+        destination.description.toLowerCase().includes(searchLower) ||
+        destination.tags.toLowerCase().includes(searchLower)
+      )
+    );
   });
 
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentDestinations = filteredDestinations.slice(indexOfFirstItem, indexOfLastItem);
-
   const totalPages = Math.ceil(filteredDestinations.length / itemsPerPage);
 
   return (
@@ -98,8 +85,8 @@ function Destination() {
 
         {/* Destination List */}
         <div className="row">
-          {currentDestinations.map((destination, index) => (
-            <div className="col-lg-4 col-md-6 mb-4" key={index}>
+          {currentDestinations.map((destination) => (
+            <div className="col-lg-4 col-md-6 mb-4" key={destination.id}>
               <div 
                 className="destination-item position-relative overflow-hidden mb-2"
                 onClick={() => handleShow(destination)}
@@ -107,13 +94,13 @@ function Destination() {
               >
                 <img
                   className="img-fluid rounded shadow-lg"
-                  src={destination.img}
+                  src={destination.image_url}
                   alt={destination.name}
                   style={{ width: "400px", height: "250px", objectFit: "cover", transition: "0.3s" }}
                 />
                 <div className="destination-overlay text-white text-decoration-none">
                   <h5 className="text-white">{destination.name}</h5>
-                  <span>{destination.category}</span>
+                  <span>{destination.tags}</span>
                 </div>
               </div>
             </div>
@@ -151,12 +138,13 @@ function Destination() {
           {selectedDestination && (
             <>
               <img 
-                src={selectedDestination.img} 
+                src={selectedDestination.image_url} 
                 alt={selectedDestination.name} 
                 className="img-fluid rounded mb-3"
                 style={{ width: "100%", height: "auto" }} 
               />
-              <p><strong>Description:</strong> {selectedDestination.desci}</p>
+              <p><strong>Location:</strong> {selectedDestination.location}</p>
+              <p><strong>Description:</strong> {selectedDestination.description}</p>
             </>
           )}
         </Modal.Body>
@@ -169,46 +157,3 @@ function Destination() {
 }
 
 export default Destination;
-
-
-
-
-
-
-// const destinations = [
-//   { id: 1, name: "Pokhara", image: "/images/pokhara.jpg", description: "A beautiful lakeside city." },
-//   { id: 2, name: "Kathmandu", image: "/images/kathmandu.jpg", description: "The capital city with rich culture." },
-//   { id: 3, name: "Chitwan", image: "/images/chitwan.jpg", description: "Famous for its national park." }
-// ];
-
-// const Destinations = () => {
-//   return (
-//     <Container className="mt-4">
-//       <ImageCarousel />
-//       <Map />
-//       <h2 className="text-center mb-4 stylish-heading">🌍 Explore Nepali Destinations</h2>
-//       <Row>
-//         {destinations.map((destination) => (
-//           <Col md={4} key={destination.id} className="mb-4">
-//             <Card className="destination-card">
-//               <Card.Img variant="top" src={destination.image} className="card-image"/>
-//               <Card.Body>
-//                 <Card.Title className="card-title">{destination.name}</Card.Title>
-//                 <Card.Text>{destination.description}</Card.Text>
-//                 <Button variant="primary" className="custom-button">View More</Button>
-//               </Card.Body>
-//             </Card>
-//           </Col>
-//         ))}
-//       </Row>
-//     </Container>
-//   );
-// };
-
-
-
-// export default Destinations;
-
-
-
-

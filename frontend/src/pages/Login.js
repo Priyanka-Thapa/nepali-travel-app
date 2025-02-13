@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import "../styles/login.css";
-import { useNavigate } from "react-router-dom";
+
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false); // ✅ Loading state
-  const navigate = useNavigate(); 
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -25,8 +25,7 @@ const Login = ({ onLogin }) => {
 
       localStorage.setItem("token", data.token);
       onLogin(data.token); // Update authentication state
-      console.log('from loginm');
-      navigate("/admin"); 
+      window.location.href = BASE_URL + "/admin";
     } catch (err) {
       setError(err.message);
     } finally {
