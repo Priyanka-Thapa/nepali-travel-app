@@ -12,7 +12,7 @@ A web application showcasing travel destinations in Nepal
 🛠️ Tech Stack
 Frontend: React.js, React Router, Bootstrap, Axios
 Backend: Node.js, Express.js, MySQL, JWT Authentication
-Deployment: Docker, Docker Compose, Railway
+Deployment: Docker, Docker Compose
 
 🎯 Installation & Setup
 1️⃣ Clone the Repository
@@ -22,12 +22,12 @@ cd nepali-travel-app
 2️⃣ Setup Backend
 cd backend
 npm install
-npm start
+
 
 3️⃣ Setup Frontend
 cd frontend
 npm install
-npm start
+
 🐳 Docker Setup
 To run using Docker & Docker Compose, execute:
 docker-compose up --build
